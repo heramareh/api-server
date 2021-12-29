@@ -14,7 +14,7 @@ class MusicList(Resource):
         datas = []
         # print(request.args.get('path'))
         # path = request.args.get('path')
-        path = ""
+        path = "/home/liwang/FrontendProject/vuetest/static"
         for root, dir, files in os.walk(path):
             for id, file in enumerate(files, 1):
                 datas.append({"id": id, "name": file, "src": './static/'+file})
