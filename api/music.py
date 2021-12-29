@@ -13,9 +13,11 @@ class MusicList(Resource):
     def get(self):
         datas = []
         # print(request.args.get('path'))
-        for root, dir, files in os.walk(request.args.get('path')):
+        # path = request.args.get('path')
+        path = ""
+        for root, dir, files in os.walk(path):
             for id, file in enumerate(files, 1):
-                datas.append({"id": id, "name": file, "src": request.args.get('dir')+file})
+                datas.append({"id": id, "name": file, "src": './static/'+file})
         return jsonify({"code": 200, "data": datas})
 
 if __name__ == '__main__':
