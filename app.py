@@ -15,4 +15,4 @@ if __name__ == '__main__':
     api = Api(app)
     api.add_resource(HelloWorld, '/api/helloworld')
     api.add_resource(MusicList, '/api/musiclist')
-    app.run(debug=True, port=8080)
+    app.run(debug=True, port=8888)
