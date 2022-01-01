@@ -38,7 +38,7 @@ class SearchMusic(Resource):
         data = json.loads(obj.text.strip().lstrip(start.group()).rstrip(")"))
         return data['data']['lists']
 
-    def __get_src(self, song_info):
+    def __get_song(self, song_info):
         """下载歌曲"""
         # 展示前十个搜索结果
         print(str(song_info['FileName']).replace('<em>', '').replace('</em>', ''))
@@ -46,7 +46,7 @@ class SearchMusic(Resource):
         url = "http://m.kugou.com/app/i/getSongInfo.php?cmd=playInfo&hash={}".format(file_hash)
         obj = requests.get(url)
         data = obj.json()  # json格式
-        return data['url']
+        return data
 
     def get(self):
         datas = []
@@ -55,9 +55,11 @@ class SearchMusic(Resource):
         song_list = self.__search(name)
         if song_list:
             for song_info in self.__search(name)[:10]:
-                src = self.__get_src(song_info)
+                song = self.__get_song(song_info)
+                src = song['url']
+                img = song['imgUrl'].replace("{size}", "260")
                 if src:
-                    datas.append({"id": id, "name": str(song_info['FileName']).replace('<em>', '').replace('</em>', ''), "src": src})
+                    datas.append({"id": id, "name": str(song_info['FileName']).replace('<em>', '').replace('</em>', ''), "src": src, "img": img})
                     id += 1
         return jsonify({"code": 200, "data": datas})
 
