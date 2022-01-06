@@ -44,10 +44,11 @@ class SearchMusic(Resource):
         print(str(song_info['FileName']).replace('<em>', '').replace('</em>', ''))
         file_hash = song_info['FileHash']
         album_id = song_info['AlbumID']
-        url = "http://m.kugou.com/app/i/getSongInfo.php?cmd=playInfo&hash={}&album_id={}".format(file_hash, album_id)
-        obj = requests.get(url)
+        # url = "http://m.kugou.com/app/i/getSongInfo.php?cmd=playInfo&hash={}&album_id={}".format(file_hash, album_id)
+        url = "https://wwwapi.kugou.com/yy/index.php?r=play/getdata&hash={}&album_id={}&_={}".format(file_hash, album_id, str(int(time.time()*1000)))
+        obj = requests.get(url, headers={"cookie": "kg_mid=1; Hm_lvt_aedee6983d4cfc62f509129360d6bb3d=1641026538; kg_dfid=1"})
         data = obj.json()  # json格式
-        return data
+        return data['data']
 
     def get(self):
         datas = []
@@ -57,10 +58,13 @@ class SearchMusic(Resource):
         if song_list:
             for song_info in self.__search(name)[:10]:
                 song = self.__get_song(song_info)
-                src = song['url']
-                img = song['imgUrl'].replace("{size}", "260").replace("https", "http")
+                # src = song['url']
+                # img = song['imgUrl'].replace("{size}", "260").replace("https", "http")
+                src = song['play_url']
+                img = song['img']
                 if src:
-                    datas.append({"id": id, "name": str(song_info['FileName']).replace('<em>', '').replace('</em>', ''), "src": src, "img": img})
+                    # datas.append({"id": id, "name": str(song_info['FileName']).replace('<em>', '').replace('</em>', ''), "src": src, "img": img})
+                    datas.append({"id": id, "name": song['audio_name'], "src": src, "img": img})
                     id += 1
         return jsonify({"code": 200, "data": datas})
 
