@@ -64,7 +64,7 @@ class SearchMusic(Resource):
                 img = song['img']
                 if src:
                     # datas.append({"id": id, "name": str(song_info['FileName']).replace('<em>', '').replace('</em>', ''), "src": src, "img": img})
-                    datas.append({"id": id, "name": song['audio_name'], "src": src, "img": img})
+                    datas.append({"id": id, "name": str(song_info['FileName']).replace('<em>', '').replace('</em>', ''), "src": src, "img": img})
                     id += 1
         return jsonify({"code": 200, "data": datas})
 
